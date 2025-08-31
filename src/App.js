@@ -6,7 +6,6 @@ import UsersView from './components/Users';
 import ScheduleView from './components/Schedule';
 import ReportsView from './components/Reports';
 import SettingsView from './components/Settings';
-import ESP32ControlPanel from './components/ESP32ControlPanel';  // הוסף את השורה הזאת
 
 import { 
   Computer, 
@@ -23,13 +22,10 @@ import {
   X,
   Edit,
   Save,
-  Clock,
-  Zap  // הוסף את השורה הזאת
+  Clock
 } from 'lucide-react';
 
 const SchoolCartManager = () => {
-
-
   // פונקציות שמירה וטעינה מ-localStorage
   const saveToStorage = (key, data) => {
     try {
@@ -57,9 +53,8 @@ const SchoolCartManager = () => {
   const [editingCart, setEditingCart] = useState(null);
   const [showCartDetails, setShowCartDetails] = useState(null);
   const [showAddUser, setShowAddUser] = useState(false);
-  
 
-    const [notifications, setNotifications] = useState([
+  const [notifications, setNotifications] = useState([
     {
       id: 1,
       userId: 'cohen@school.edu',
@@ -81,33 +76,31 @@ const SchoolCartManager = () => {
   const [showNotifications, setShowNotifications] = useState(false);
 
   const [schoolSettings, setSchoolSettings] = useState(() => loadFromStorage('schoolSettings', {
-
     workDays: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
     workStartTime: '08:00',
     workEndTime: '16:00',
-    approvalPolicy: 'auto' // 'auto' = אישור אוטומטי, 'manual' = מנהל צריך לאשר
- }));
+    approvalPolicy: 'auto'
+  }));
 
- // בתי ספר
   const [schools, setSchools] = useState(() => loadFromStorage('schools', [
-  {
-    id: 1,
-    name: 'בית ספר יסודי הרצל',
-    symbolCode: '123456',
-    address: 'רחוב הרצל 15, תל אביב',
-    phone: '03-1234567',
-    email: 'herzel@school.edu'
-  }
-]));
+    {
+      id: 1,
+      name: 'בית ספר יסודי הרצל',
+      symbolCode: '123456',
+      address: 'רחוב הרצל 15, תל אביב',
+      phone: '03-1234567',
+      email: 'herzel@school.edu'
+    }
+  ]));
   
   const [selectedSchool, setSelectedSchool] = useState(() => loadFromStorage('selectedSchool', 1));
 
   const [users, setUsers] = useState(() => loadFromStorage('users', [
-  { id: 1, name: 'מורה כהן', role: 'teacher', email: 'cohen@school.edu', password: '123456', schoolId: 1 },
-  { id: 2, name: 'מנהל דוד', role: 'manager', email: 'david@school.edu', password: '123456', schoolId: 1 },
-  { id: 3, name: 'טכנאי לוי', role: 'technician', email: 'levi@school.edu', password: '123456', schoolId: 1 },
-  { id: 4, name: 'מנהל מערכת ראשי', role: 'masteradmin', email: 'info@innosys.co.il', password: 'In@3030548', schoolId: null }
- ]));
+    { id: 1, name: 'מורה כהן', role: 'teacher', email: 'cohen@school.edu', password: '123456', schoolId: 1 },
+    { id: 2, name: 'מנהל דוד', role: 'manager', email: 'david@school.edu', password: '123456', schoolId: 1 },
+    { id: 3, name: 'טכנאי לוי', role: 'technician', email: 'levi@school.edu', password: '123456', schoolId: 1 },
+    { id: 4, name: 'מנהל מערכת ראשי', role: 'masteradmin', email: 'info@innosys.co.il', password: 'In@3030548', schoolId: null }
+  ]));
 
   const [carts, setCarts] = useState(() => loadFromStorage('carts', [
     {
@@ -118,18 +111,15 @@ const SchoolCartManager = () => {
       totalComputers: 30,
       connectedComputers: 28,
       reservedBy: 'מורה כהן',
-      color: '#2563eb', // כחול
+      color: '#2563eb',
       schoolId: 1,
-      
-magneticCheckEnabled: true,     // בדיקת מגנט
-powerCheckEnabled: true,        // בדיקת טעינה
-autoLockEnabled: true,          // נעילה אוטומטית
-alertThresholdMinutes: 10,      // זמן התרעה
-
-// מצב עדכני (יתעדכן מהחומרה)
-currentDoorStatus: 'closed',    // 'open', 'closed', 'unknown'
-currentPowerStatus: 'ok',       // 'ok', 'warning', 'error'
-lastSensorUpdate: new Date(),
+      magneticCheckEnabled: true,
+      powerCheckEnabled: true,
+      autoLockEnabled: true,
+      alertThresholdMinutes: 10,
+      currentDoorStatus: 'closed',
+      currentPowerStatus: 'ok',
+      lastSensorUpdate: new Date(),
     },
     {
       id: 2,
@@ -139,17 +129,15 @@ lastSensorUpdate: new Date(),
       totalComputers: 25,
       connectedComputers: 23,
       currentUser: 'טכנאי לוי',
-      color: '#16a34a', // ירוק
+      color: '#16a34a',
       schoolId: 1,
-      magneticCheckEnabled: true,     // בדיקת מגנט
-powerCheckEnabled: true,        // בדיקת טעינה
-autoLockEnabled: true,          // נעילה אוטומטית
-alertThresholdMinutes: 10,      // זמן התרעה
-
-// מצב עדכני (יתעדכן מהחומרה)
-currentDoorStatus: 'closed',    // 'open', 'closed', 'unknown'
-currentPowerStatus: 'ok',       // 'ok', 'warning', 'error'
-lastSensorUpdate: new Date(),
+      magneticCheckEnabled: true,
+      powerCheckEnabled: true,
+      autoLockEnabled: true,
+      alertThresholdMinutes: 10,
+      currentDoorStatus: 'closed',
+      currentPowerStatus: 'ok',
+      lastSensorUpdate: new Date(),
     },
     {
       id: 3,
@@ -158,21 +146,19 @@ lastSensorUpdate: new Date(),
       status: 'locked',
       totalComputers: 20,
       connectedComputers: 20,
-      color: '#dc2626', // אדום
+      color: '#dc2626',
       schoolId: 1,
-      magneticCheckEnabled: true,     // בדיקת מגנט
-powerCheckEnabled: true,        // בדיקת טעינה
-autoLockEnabled: true,          // נעילה אוטומטית
-alertThresholdMinutes: 10,      // זמן התרעה
-
-// מצב עדכני (יתעדכן מהחומרה)
-currentDoorStatus: 'closed',    // 'open', 'closed', 'unknown'
-currentPowerStatus: 'ok',       // 'ok', 'warning', 'error'
-lastSensorUpdate: new Date(),
+      magneticCheckEnabled: true,
+      powerCheckEnabled: true,
+      autoLockEnabled: true,
+      alertThresholdMinutes: 10,
+      currentDoorStatus: 'closed',
+      currentPowerStatus: 'ok',
+      lastSensorUpdate: new Date(),
     }
   ]));
 
-const [reservations, setReservations] = useState(() => loadFromStorage('reservations', [
+  const [reservations, setReservations] = useState(() => loadFromStorage('reservations', [
     {
       id: 1,
       cartId: 1,
@@ -205,7 +191,7 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
     }
   ]));
 
-  // טעינת משתמש מ-localStorage בטעינה ראשונית - הוסף את זה
+  // טעינת משתמש מ-localStorage בטעינה ראשונית
   React.useEffect(() => {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
@@ -245,34 +231,29 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
     saveToStorage('selectedSchool', selectedSchool);
   }, [selectedSchool]);
 
-  // סימולציה של שליחת אימיילים
- 
   const sendEmailNotification = (to, subject, message, reservationId = null, type = 'email') => {
     console.log('📧 שליחת אימייל:');
     console.log(`📬 אל: ${to}`);
     console.log(`📋 נושא: ${subject}`);
     console.log(`📄 תוכן: ${message}`);
     
-    // הוספת התראה למערכת
     const newNotification = {
       id: Date.now() + Math.random(),
       userId: to,
       message: `📧 ${message}`,
       type: type,
-      reservationId: reservationId, // ← זה חשוב!
+      reservationId: reservationId,
       read: false,
       createdAt: new Date()
     };
     
     setNotifications(prev => [...prev, newNotification]);
     
-    // התראה ויזואלית (אופציונלי)
     setTimeout(() => {
       alert(`📧 אימייל נשלח ל-${to}: ${subject}`);
     }, 500);
   };
 
-  // שליחת התראה למנהלים על הזמנה חדשה
   const notifyManagersOfPendingReservation = (reservation) => {
     const managers = users.filter(user => 
       user.role === 'manager' || user.role === 'superadmin'
@@ -282,20 +263,18 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
       const subject = '🔔 הזמנה חדשה ממתינה לאישור';
       const message = `הזמנה חדשה מ-${reservation.teacherName} ל-${reservation.cartName} ביום ${new Date(reservation.date).toLocaleDateString('he-IL')} בשעה ${reservation.hour}:00`;
       
-      // הוספת התראה למערכת עם קישור להזמנה
       const newNotification = {
-        id: Date.now() + Math.random(), // וודא שה-ID יחיד
+        id: Date.now() + Math.random(),
         userId: manager.email,
         message: `📧 ${message}`,
         type: 'pending_approval',
-        reservationId: reservation.id, // ← זה החשוב!
+        reservationId: reservation.id,
         read: false,
         createdAt: new Date()
       };
       
       setNotifications(prev => [...prev, newNotification]);
       
-      // שליחת אימייל (לוג)
       console.log('📧 שליחת אימייל:');
       console.log(`📬 אל: ${manager.email}`);
       console.log(`📋 נושא: ${subject}`);
@@ -303,7 +282,6 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
     });
   };
 
-  // שליחת התראה למורה על אישור/דחיה
   const notifyTeacherOfReservationStatus = (reservation, status) => {
     const subject = status === 'approved' ? '✅ ההזמנה שלך אושרה' : '❌ ההזמנה שלך נדחתה';
     const message = status === 'approved' 
@@ -311,10 +289,8 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
       : `ההזמנה שלך ל-${reservation.cartName} ביום ${new Date(reservation.date).toLocaleDateString('he-IL')} בשעה ${reservation.hour}:00 נדחתה.`;
     
     sendEmailNotification(reservation.teacherEmail, subject, message, reservation.id, 'email');
-
   };
 
-  // מחיקת התראות ישנות של הזמנה מסוימת
   const removeNotificationsByReservation = (reservationId) => {
     setNotifications(prev => 
       prev.filter(notification => notification.reservationId !== reservationId)
@@ -326,7 +302,7 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
     if (user) {
       setCurrentUser(user);
       setIsAuthenticated(true);
-      localStorage.setItem('currentUser', JSON.stringify(user)); // הוסף את השורה הזאת
+      localStorage.setItem('currentUser', JSON.stringify(user));
       return true;
     }
     return false;
@@ -335,11 +311,11 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
   const handleLogout = () => {
     setCurrentUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('currentUser'); // הוסף את השורה הזאת
+    localStorage.removeItem('currentUser');
     setCurrentView('dashboard');
   };
 
-const toggleNotifications = () => {
+  const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
 
@@ -354,73 +330,70 @@ const toggleNotifications = () => {
   };
 
   const addUser = (newUser) => {
-  const userWithId = {
-    ...newUser,
-    id: Date.now(),
-    password: newUser.password || '123456',
-    schoolId: selectedSchool
+    const userWithId = {
+      ...newUser,
+      id: Date.now(),
+      password: newUser.password || '123456',
+      schoolId: selectedSchool
+    };
+    setUsers([...users, userWithId]);
+    setShowAddUser(false);
+    alert(`המשתמש ${newUser.name} נוסף בהצלחה למערכת`);
   };
-  setUsers([...users, userWithId]);
-  setShowAddUser(false);
-  alert(`המשתמש ${newUser.name} נוסף בהצלחה למערכת`);
-};
 
-const updateUser = (updatedUser) => {
-  setUsers(prevUsers => 
-    prevUsers.map(user => 
-      user.id === updatedUser.id ? updatedUser : user
-    )
-  );
-  alert(`המשתמש ${updatedUser.name} עודכן בהצלחה`);
-};
-
-const deleteUser = (userId) => {
-  setUsers(prevUsers => 
-    prevUsers.filter(user => user.id !== userId)
-  );
-  alert('המשתמש נמחק בהצלחה');
-};
-
-const addCart = (newCart) => {
-  const cartWithId = {
-    ...newCart,
-    id: Date.now(),
-    color: newCart.color || '#2563eb',
-    schoolId: selectedSchool || currentUser?.schoolId
+  const updateUser = (updatedUser) => {
+    setUsers(prevUsers => 
+      prevUsers.map(user => 
+        user.id === updatedUser.id ? updatedUser : user
+      )
+    );
+    alert(`המשתמש ${updatedUser.name} עודכן בהצלחה`);
   };
-  setCarts([...carts, cartWithId]);
-  alert(`העגלה ${newCart.name} נוספה בהצלחה למערכת`);
-};
+
+  const deleteUser = (userId) => {
+    setUsers(prevUsers => 
+      prevUsers.filter(user => user.id !== userId)
+    );
+    alert('המשתמש נמחק בהצלחה');
+  };
+
+  const addCart = (newCart) => {
+    const cartWithId = {
+      ...newCart,
+      id: Date.now(),
+      color: newCart.color || '#2563eb',
+      schoolId: selectedSchool || currentUser?.schoolId
+    };
+    setCarts([...carts, cartWithId]);
+    alert(`העגלה ${newCart.name} נוספה בהצלחה למערכת`);
+  };
 
   const addReservation = (newReservation) => {
     const requestedDate = new Date(newReservation.date);
     const startHour = newReservation.hour;
     const endHour = startHour + newReservation.duration;
     
-    // בדיקה שהתאריך הוא ביום עבודה
-  const dayOfWeek = requestedDate.getDay(); // 0=ראשון, 1=שני, וכו'
-  const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  const requestedDayName = dayNames[dayOfWeek];
-  
-  if (!schoolSettings.workDays.includes(requestedDayName)) {
-    const hebrewDays = {
-      'sunday': 'ראשון', 'monday': 'שני', 'tuesday': 'שלישי',
-      'wednesday': 'רביעי', 'thursday': 'חמישי', 'friday': 'שישי', 'saturday': 'שבת'
-    };
-    alert(`לא ניתן לקבוע הזמנה ביום ${hebrewDays[requestedDayName]} - זה לא יום עבודה`);
-    return;
-  }
-  
-  // בדיקה שהשעה בטווח שעות העבודה
-  const workStart = parseInt(schoolSettings.workStartTime.split(':')[0]);
-  const workEnd = parseInt(schoolSettings.workEndTime.split(':')[0]);
-  
-  if (startHour < workStart || endHour > workEnd) {
-    alert(`ההזמנה חייבת להיות בין השעות ${workStart}:00 - ${workEnd}:00`);
-    return;
-  }
+    const dayOfWeek = requestedDate.getDay();
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const requestedDayName = dayNames[dayOfWeek];
+    
+    if (!schoolSettings.workDays.includes(requestedDayName)) {
+      const hebrewDays = {
+        'sunday': 'ראשון', 'monday': 'שני', 'tuesday': 'שלישי',
+        'wednesday': 'רביעי', 'thursday': 'חמישי', 'friday': 'שישי', 'saturday': 'שבת'
+      };
+      alert(`לא ניתן לקבוע הזמנה ביום ${hebrewDays[requestedDayName]} - זה לא יום עבודה`);
+      return;
+    }
+    
+    const workStart = parseInt(schoolSettings.workStartTime.split(':')[0]);
+    const workEnd = parseInt(schoolSettings.workEndTime.split(':')[0]);
+    
+    if (startHour < workStart || endHour > workEnd) {
+      alert(`ההזמנה חייבת להיות בין השעות ${workStart}:00 - ${workEnd}:00`);
+      return;
+    }
 
-    // בדיקת התנגשות
     const hasConflict = reservations.some(existingRes => {
       if (existingRes.cartId !== newReservation.cartId) return false;
       
@@ -438,7 +411,6 @@ const addCart = (newCart) => {
       return;
     }
 
-    // קבע סטטוס לפי מדיניות האישורים
     let status;
     if (schoolSettings.approvalPolicy === 'auto') {
       status = 'confirmed';
@@ -453,16 +425,13 @@ const addCart = (newCart) => {
       schoolId: selectedSchool || currentUser?.schoolId
     };
     
-    // יצירת הזמנות (רגילה או חוזרת)
     const reservationsToCreate = [];
     
     if (newReservation.isRecurring && newReservation.recurringWeeks) {
-      // יצירת הזמנות חוזרות
       for (let week = 0; week < newReservation.recurringWeeks; week++) {
         const weeklyDate = new Date(requestedDate);
         weeklyDate.setDate(weeklyDate.getDate() + (week * 7));
         
-        // בדיקת התנגשות לכל שבוע
         const weeklyStartHour = startHour;
         const weeklyEndHour = endHour;
         
@@ -501,22 +470,18 @@ const addCart = (newCart) => {
         }
       }
     } else {
-      // הזמנה רגילה
       reservationsToCreate.push(reservation);
     }
     
-    // הוספת כל ההזמנות למערכת
     setReservations(prev => [...prev, ...reservationsToCreate]);
     setShowNewReservation(false);
     
-    // שליחת התראות אימייל לכל הזמנה שנוצרה
     reservationsToCreate.forEach(res => {
       if (res.status === 'pending') {
         notifyManagersOfPendingReservation(res);
       }
     });
     
-    // הודעת הצלחה
     if (reservationsToCreate.length === 1) {
       alert(`הזמנה נשמרה בהצלחה עבור ${reservation.cartName}`);
     } else {
@@ -547,228 +512,211 @@ const addCart = (newCart) => {
   };
 
   const approveReservation = (reservationId) => {
-  const reservation = reservations.find(r => r.id === reservationId);
-  setReservations(prevReservations =>
-    prevReservations.map(res =>
-      res.id === reservationId ? { ...res, status: 'confirmed' } : res
-    )
-  );
-  
-  // שליחת התראה למורה
-  if (reservation) {
-    notifyTeacherOfReservationStatus(reservation, 'approved');
-  }
-  
-  // מחיקת התראות ישנות של ההזמנה הזו
-  removeNotificationsByReservation(reservationId);
-
-  alert('ההזמנה אושרה בהצלחה');
-};
-
-  const rejectReservation = (reservationId) => {
-  const reservation = reservations.find(r => r.id === reservationId);
-  const confirmReject = window.confirm(`האם אתה בטוח שברצונך לדחות את ההזמנה של ${reservation?.cartName}?`);
-  
-  if (confirmReject) {
-    // שליחת התראה למורה לפני המחיקה
-    if (reservation) {
-      notifyTeacherOfReservationStatus(reservation, 'rejected');
-    }
-    
+    const reservation = reservations.find(r => r.id === reservationId);
     setReservations(prevReservations =>
-      prevReservations.filter(res => res.id !== reservationId)
+      prevReservations.map(res =>
+        res.id === reservationId ? { ...res, status: 'confirmed' } : res
+      )
     );
-
-    // מחיקת התראות ישנות של ההזמנה הזו
-      removeNotificationsByReservation(reservationId);
-
-    alert('ההזמנה נדחתה ונמחקה');
-  }
-};
-
-
-React.useEffect(() => {
-  const handleApiRequest = (path, method, data) => {
-    console.log(`📡 API Call: ${method} ${path}`, data);
-  console.log('🔍 Debug:', { path, method, isStatus: path.includes('/status') });
-    // בדיקת מצב עגלה
-    if (path.includes('/status') && method === 'GET') {
-      
-  // נחלץ את cartId מהנתיב /api/cart/1/status
-  const pathParts = path.split('/');
-  const cartIdIndex = pathParts.indexOf('cart') + 1;
-  const cartId = parseInt(pathParts[cartIdIndex]);
-  
-  console.log('🔍 מחפש עגלה:', cartId);
-      const cart = carts.find(c => c.id === cartId);
-      
-      if (!cart) {
-        return { error: 'עגלה לא נמצאה', code: 404 };
-      }
-      
-      return {
-        cartId: cart.id,
-        name: cart.name,
-        status: cart.status,
-        settings: {
-          magneticCheckEnabled: cart.magneticCheckEnabled,
-          powerCheckEnabled: cart.powerCheckEnabled,
-          autoLockEnabled: cart.autoLockEnabled,
-          alertThresholdMinutes: cart.alertThresholdMinutes
-        },
-        currentState: {
-          doorStatus: cart.currentDoorStatus,
-          powerStatus: cart.currentPowerStatus,
-          lastUpdate: cart.lastSensorUpdate
-        },
-        timestamp: new Date().toISOString()
-      };
+    
+    if (reservation) {
+      notifyTeacherOfReservationStatus(reservation, 'approved');
     }
     
-    // בדיקת הרשאה
-    if (path === '/api/cart/access' && method === 'POST') {
-      const { cartId, userEmail, currentTime } = data;
-      
-      // בדיקה האם יש הזמנה פעילה
-      const now = currentTime ? new Date(currentTime) : new Date();
-      const currentHour = now.getHours();
-      const today = now.toDateString();
-      
-      const activeReservation = reservations.find(res => {
-        const resDate = new Date(res.date);
-        return (
-          res.cartId === cartId &&
-          res.teacherEmail === userEmail &&
-          res.status === 'confirmed' &&
-          resDate.toDateString() === today &&
-          res.hour <= currentHour &&
-          res.hour + res.duration > currentHour
-        );
-      });
-      
-      if (activeReservation) {
-        return {
-          allowed: true,
-          message: 'גישה מאושרת - יש הזמנה פעילה',
-          reservation: {
-            id: activeReservation.id,
-            startHour: activeReservation.hour,
-            endHour: activeReservation.hour + activeReservation.duration,
-            className: activeReservation.className,
-            subject: activeReservation.subject
-          }
-        };
-      }
-      
-      // בדיקה אם המשתמש הוא מנהל או טכנאי
-      const user = users.find(u => u.email === userEmail);
-      if (user && (user.role === 'manager' || user.role === 'technician' || user.role === 'masteradmin')) {
-        return {
-          allowed: true,
-          message: 'גישה מאושרת - הרשאת מנהל/טכנאי',
-          adminAccess: true
-        };
-      }
-      
-      return {
-        allowed: false,
-        message: 'גישה נדחתה - אין הזמנה פעילה או הרשאה',
-        reason: 'no_active_reservation'
-      };
-    }
-    
-    // עדכון חיישנים
-    if (path.startsWith('/api/cart/') && path.includes('/sensors') && method === 'POST') {
-      const cartId = parseInt(path.split('/')[3]);
-      const { doorStatus, powerStatus, voltage, current } = data;
-      
-      // עדכון מצב העגלה במערכת
-      setCarts(prevCarts => 
-        prevCarts.map(cart => 
-          cart.id === cartId ? {
-            ...cart,
-            currentDoorStatus: doorStatus,
-            currentPowerStatus: powerStatus,
-            lastSensorUpdate: new Date().toISOString()
-          } : cart
-        )
-      );
-      
-      return {
-        success: true,
-        message: 'נתוני חיישנים עודכנו',
-        cartId: cartId
-      };
-    }
-    
-    return { error: 'API endpoint לא נמצא', code: 404 };
+    removeNotificationsByReservation(reservationId);
+    alert('ההזמנה אושרה בהצלחה');
   };
 
-  window.cartAPI = handleApiRequest;
-  console.log('🎯 Cart API מוכן עם endpoints מתקדמים!');
-  console.log('נסה: window.cartAPI("/api/cart/1/status", "GET")');
-}, [carts, reservations, users]);
+  const rejectReservation = (reservationId) => {
+    const reservation = reservations.find(r => r.id === reservationId);
+    const confirmReject = window.confirm(`האם אתה בטוח שברצונך לדחות את ההזמנה של ${reservation?.cartName}?`);
+    
+    if (confirmReject) {
+      if (reservation) {
+        notifyTeacherOfReservationStatus(reservation, 'rejected');
+      }
+      
+      setReservations(prevReservations =>
+        prevReservations.filter(res => res.id !== reservationId)
+      );
+
+      removeNotificationsByReservation(reservationId);
+      alert('ההזמנה נדחתה ונמחקה');
+    }
+  };
+
+  React.useEffect(() => {
+    const handleApiRequest = (path, method, data) => {
+      console.log(`📡 API Call: ${method} ${path}`, data);
+      console.log('🔍 Debug:', { path, method, isStatus: path.includes('/status') });
+      
+      if (path.includes('/status') && method === 'GET') {
+        const pathParts = path.split('/');
+        const cartIdIndex = pathParts.indexOf('cart') + 1;
+        const cartId = parseInt(pathParts[cartIdIndex]);
+        
+        console.log('🔍 מחפש עגלה:', cartId);
+        const cart = carts.find(c => c.id === cartId);
+        
+        if (!cart) {
+          return { error: 'עגלה לא נמצאה', code: 404 };
+        }
+        
+        return {
+          cartId: cart.id,
+          name: cart.name,
+          status: cart.status,
+          settings: {
+            magneticCheckEnabled: cart.magneticCheckEnabled,
+            powerCheckEnabled: cart.powerCheckEnabled,
+            autoLockEnabled: cart.autoLockEnabled,
+            alertThresholdMinutes: cart.alertThresholdMinutes
+          },
+          currentState: {
+            doorStatus: cart.currentDoorStatus,
+            powerStatus: cart.currentPowerStatus,
+            lastUpdate: cart.lastSensorUpdate
+          },
+          timestamp: new Date().toISOString()
+        };
+      }
+      
+      if (path === '/api/cart/access' && method === 'POST') {
+        const { cartId, userEmail, currentTime } = data;
+        
+        const now = currentTime ? new Date(currentTime) : new Date();
+        const currentHour = now.getHours();
+        const today = now.toDateString();
+        
+        const activeReservation = reservations.find(res => {
+          const resDate = new Date(res.date);
+          return (
+            res.cartId === cartId &&
+            res.teacherEmail === userEmail &&
+            res.status === 'confirmed' &&
+            resDate.toDateString() === today &&
+            res.hour <= currentHour &&
+            res.hour + res.duration > currentHour
+          );
+        });
+        
+        if (activeReservation) {
+          return {
+            allowed: true,
+            message: 'גישה מאושרת - יש הזמנה פעילה',
+            reservation: {
+              id: activeReservation.id,
+              startHour: activeReservation.hour,
+              endHour: activeReservation.hour + activeReservation.duration,
+              className: activeReservation.className,
+              subject: activeReservation.subject
+            }
+          };
+        }
+        
+        const user = users.find(u => u.email === userEmail);
+        if (user && (user.role === 'manager' || user.role === 'technician' || user.role === 'masteradmin')) {
+          return {
+            allowed: true,
+            message: 'גישה מאושרת - הרשאת מנהל/טכנאי',
+            adminAccess: true
+          };
+        }
+        
+        return {
+          allowed: false,
+          message: 'גישה נדחתה - אין הזמנה פעילה או הרשאה',
+          reason: 'no_active_reservation'
+        };
+      }
+      
+      if (path.startsWith('/api/cart/') && path.includes('/sensors') && method === 'POST') {
+        const cartId = parseInt(path.split('/')[3]);
+        const { doorStatus, powerStatus, voltage, current } = data;
+        
+        setCarts(prevCarts => 
+          prevCarts.map(cart => 
+            cart.id === cartId ? {
+              ...cart,
+              currentDoorStatus: doorStatus,
+              currentPowerStatus: powerStatus,
+              lastSensorUpdate: new Date().toISOString()
+            } : cart
+          )
+        );
+        
+        return {
+          success: true,
+          message: 'נתוני חיישנים עודכנו',
+          cartId: cartId
+        };
+      }
+      
+      return { error: 'API endpoint לא נמצא', code: 404 };
+    };
+
+    window.cartAPI = handleApiRequest;
+    console.log('🎯 Cart API מוכן עם endpoints מתקדמים!');
+    console.log('נסה: window.cartAPI("/api/cart/1/status", "GET")');
+  }, [carts, reservations, users]);
 
   if (!isAuthenticated) {
-  return <LoginForm onLogin={handleLogin} />;
-}
+    return <LoginForm onLogin={handleLogin} />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl" style={{
       minHeight: '100vh',
       backgroundColor: '#f9fafb',
       direction: 'rtl'
     }}>
-
-<nav style={{backgroundColor: '#2563eb', color: 'white', padding: '1rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'}}>
-  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-    <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-      <Computer style={{width: '2rem', height: '2rem'}} />
-<h1 style={{fontSize: '1.25rem', fontWeight: 'bold'}}>
-  מערכת ניהול עגלות מחשבים
-  {selectedSchool && (
-    <span style={{fontSize: '1rem', fontWeight: 'normal', marginRight: '1rem', color: '#dbeafe'}}>
-      - {schools.find(s => s.id === selectedSchool)?.name}
-    </span>
-  )}
-</h1>      
-      {/* רשימה נפתחת לבחירת בית ספר - רק למנהל ראשי */}
-      {(currentUser?.role === 'masteradmin' || currentUser?.role === 'superadmin') && (
-        <div style={{marginRight: '2rem'}}>
-
-          <select
-            value={selectedSchool}
-            onChange={(e) => setSelectedSchool(parseInt(e.target.value))}
-            style={{
-              padding: '0.5rem',
-              borderRadius: '0.375rem',
-              border: '1px solid #3b82f6',
-              backgroundColor: 'white',
-              color: '#1e40af',
-              fontSize: '0.875rem'
-            }}
-          >
-            {schools.map(school => (
-              <option key={school.id} value={school.id}>{school.name} ({school.symbolCode})</option>
-            ))}
-          </select>
-        </div>
-      )}
-    </div>
-
-          <div style={{display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.875rem'}}>
-
-            <button 
-                  onClick={toggleNotifications}
+      <nav style={{backgroundColor: '#2563eb', color: 'white', padding: '1rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'}}>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+          <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+            <Computer style={{width: '2rem', height: '2rem'}} />
+            <h1 style={{fontSize: '1.25rem', fontWeight: 'bold'}}>
+              מערכת ניהול עגלות מחשבים
+              {selectedSchool && (
+                <span style={{fontSize: '1rem', fontWeight: 'normal', marginRight: '1rem', color: '#dbeafe'}}>
+                  - {schools.find(s => s.id === selectedSchool)?.name}
+                </span>
+              )}
+            </h1>      
+            {(currentUser?.role === 'masteradmin' || currentUser?.role === 'superadmin') && (
+              <div style={{marginRight: '2rem'}}>
+                <select
+                  value={selectedSchool}
+                  onChange={(e) => setSelectedSchool(parseInt(e.target.value))}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '1.25rem',
-                    cursor: 'pointer',
-                    color: 'white'
+                    padding: '0.5rem',
+                    borderRadius: '0.375rem',
+                    border: '1px solid #3b82f6',
+                    backgroundColor: 'white',
+                    color: '#1e40af',
+                    fontSize: '0.875rem'
                   }}
                 >
-                  🔔
-                </button>
+                  {schools.map(school => (
+                    <option key={school.id} value={school.id}>{school.name} ({school.symbolCode})</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          <div style={{display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.875rem'}}>
+            <button 
+              onClick={toggleNotifications}
+              style={{
+                background: 'none',
+                border: 'none',
+                fontSize: '1.25rem',
+                cursor: 'pointer',
+                color: 'white'
+              }}
+            >
+              🔔
+            </button>
 
             <span>{currentUser?.name}</span>
             <button 
@@ -780,18 +728,11 @@ React.useEffect(() => {
           </div>
         </div>
         
-        {/* הוסף את השורות האלה כאן */}
-        {console.log('DEBUG: currentUser =', currentUser)}
-        {console.log('DEBUG: role =', currentUser?.role)}
-        {console.log('DEBUG: should show settings:', currentUser?.role === 'masteradmin')}
-        
-
         <div style={{marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem'}}>
           {['dashboard', 'carts', 'schedule', 
             ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'masteradmin' ? ['users', 'reports'] : []),
             ...(currentUser?.role === 'masteradmin' || currentUser?.role === 'superadmin' ? ['schools'] : []),
-            ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' || currentUser?.role === 'masteradmin' ? ['settings'] : []),
-            ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' || currentUser?.role === 'masteradmin' ? ['esp32'] : [])
+            ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' || currentUser?.role === 'masteradmin' ? ['settings'] : [])
           ].map(view => (
             <button
               key={view}
@@ -815,7 +756,6 @@ React.useEffect(() => {
               {view === 'reports' && <Activity style={{width: '1rem', height: '1rem'}} />}
               {view === 'schools' && <Computer style={{width: '1rem', height: '1rem'}} />}
               {view === 'settings' && <Settings style={{width: '1rem', height: '1rem'}} />}
-              {view === 'esp32' && <Zap style={{width: '1rem', height: '1rem'}} />}
               <span>
                 {view === 'dashboard' ? 'דשבורד' :
                  view === 'carts' ? 'עגלות' :
@@ -823,8 +763,7 @@ React.useEffect(() => {
                  view === 'users' ? 'משתמשים' :
                  view === 'reports' ? 'דוחות' :
                  view === 'schools' ? 'בתי ספר' : 
-                 view === 'settings' ? 'הגדרות' :
-                 view === 'esp32' ? 'בקרת ESP32' : 'לא ידוע'}
+                 view === 'settings' ? 'הגדרות' : 'לא ידוע'}
               </span>
             </button>
           ))}
@@ -853,71 +792,66 @@ React.useEffect(() => {
               </div>
             ) : (
               notifications.filter(n => n.userId === currentUser?.email).map(notification => (
-  <div key={notification.id} style={{
-    padding: '1rem',
-    borderBottom: '1px solid #f3f4f6',
-    backgroundColor: notification.read ? 'white' : '#f0f9ff'
-  }}>
-    <p style={{margin: 0, fontSize: '0.875rem'}}>{notification.message}</p>
-    <p style={{margin: 0, fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem'}}>
-      {notification.createdAt.toLocaleString('he-IL')}
-    </p>
-    
-    {/* כפתורי אישור/דחיה רק להתראות של הזמנות ממתינות */}
-    {notification.type === 'pending_approval' && 
-     notification.reservationId &&
-     (currentUser?.role === 'manager' || currentUser?.role === 'superadmin') && (
-      <div style={{marginTop: '0.5rem', display: 'flex', gap: '0.5rem'}}>
-        <button
-          onClick={() => {
-            approveReservation(notification.reservationId);
-            // מסמן את ההתראה כנקראה
-            setNotifications(prev => prev.map(n => 
-              n.id === notification.id ? {...n, read: true} : n
-            ));
-          }}
-          style={{
-            backgroundColor: '#16a34a',
-            color: 'white',
-            padding: '0.25rem 0.5rem',
-            borderRadius: '0.25rem',
-            fontSize: '0.75rem',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
-          ✓ אישור
-        </button>
-        <button
-          onClick={() => {
-            rejectReservation(notification.reservationId);
-            // מסמן את ההתראה כנקראה
-            setNotifications(prev => prev.map(n => 
-              n.id === notification.id ? {...n, read: true} : n
-            ));
-          }}
-          style={{
-            backgroundColor: '#ef4444',
-            color: 'white',
-            padding: '0.25rem 0.5rem',
-            borderRadius: '0.25rem',
-            fontSize: '0.75rem',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
-          ✗ דחיה
-        </button>
-      </div>
-    )}
-  </div>
-))
+                <div key={notification.id} style={{
+                  padding: '1rem',
+                  borderBottom: '1px solid #f3f4f6',
+                  backgroundColor: notification.read ? 'white' : '#f0f9ff'
+                }}>
+                  <p style={{margin: 0, fontSize: '0.875rem'}}>{notification.message}</p>
+                  <p style={{margin: 0, fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem'}}>
+                    {notification.createdAt.toLocaleString('he-IL')}
+                  </p>
+                  
+                  {notification.type === 'pending_approval' && 
+                   notification.reservationId &&
+                   (currentUser?.role === 'manager' || currentUser?.role === 'superadmin') && (
+                    <div style={{marginTop: '0.5rem', display: 'flex', gap: '0.5rem'}}>
+                      <button
+                        onClick={() => {
+                          approveReservation(notification.reservationId);
+                          setNotifications(prev => prev.map(n => 
+                            n.id === notification.id ? {...n, read: true} : n
+                          ));
+                        }}
+                        style={{
+                          backgroundColor: '#16a34a',
+                          color: 'white',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '0.25rem',
+                          fontSize: '0.75rem',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        ✓ אישור
+                      </button>
+                      <button
+                        onClick={() => {
+                          rejectReservation(notification.reservationId);
+                          setNotifications(prev => prev.map(n => 
+                            n.id === notification.id ? {...n, read: true} : n
+                          ));
+                        }}
+                        style={{
+                          backgroundColor: '#ef4444',
+                          color: 'white',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '0.25rem',
+                          fontSize: '0.75rem',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        ✗ דחיה
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))
             )}
           </div>
         </div>
       )}
-
-      <main></main>
 
       <main>
         {currentView === 'dashboard' && <Dashboard carts={carts} reservations={reservations} currentUser={currentUser} approveReservation={approveReservation} rejectReservation={rejectReservation} />}
@@ -984,24 +918,10 @@ React.useEffect(() => {
             </div>
           </div>
         )}
-
-        {currentView === 'esp32' && (currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' || currentUser?.role === 'masteradmin') && (
-          <ESP32ControlPanel currentUser={currentUser} />
-        )}
-        {currentView === 'esp32' && (currentUser?.role !== 'manager' && currentUser?.role !== 'superadmin' && currentUser?.role !== 'technician' && currentUser?.role !== 'masteradmin') && (
-          <div style={{padding: '1.5rem'}}>
-            <div style={{backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.5rem', padding: '1rem'}}>
-              <h3 style={{color: '#991b1b', fontWeight: '500'}}>אין הרשאה</h3>
-              <p style={{color: '#dc2626', fontSize: '0.875rem', marginTop: '0.25rem'}}>רק מנהל מערכת או מנהל בית ספר יכולים לגשת לבקרת ESP32</p>
-            </div>
-          </div>
-        )}
       </main>
     </div>
   );
 };
-
-// ... (שאר הקוד נשאר כפי שהיה)
 
 const SchoolsView = ({ schools, setSchools, selectedSchool, setSelectedSchool }) => {
   const [showAddSchool, setShowAddSchool] = useState(false);
@@ -1039,7 +959,6 @@ const SchoolsView = ({ schools, setSchools, selectedSchool, setSelectedSchool })
         </button>
       </div>
 
-      {/* רשימת בתי ספר */}
       <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem'}}>
         {schools.map(school => (
           <div key={school.id} style={{
@@ -1078,7 +997,6 @@ const SchoolsView = ({ schools, setSchools, selectedSchool, setSelectedSchool })
         ))}
       </div>
 
-      {/* חלון הוספת בית ספר */}
       {showAddSchool && (
         <AddSchoolModal 
           onAdd={addSchool}
@@ -1090,14 +1008,13 @@ const SchoolsView = ({ schools, setSchools, selectedSchool, setSelectedSchool })
 };
 
 const AddSchoolModal = ({ onAdd, onCancel }) => {
- const [formData, setFormData] = useState({
-  name: '',
-  symbolCode: '',
-  address: '',
-  phone: '',
-  email: ''
-});
-  
+  const [formData, setFormData] = useState({
+    name: '',
+    symbolCode: '',
+    address: '',
+    phone: '',
+    email: ''
+  });
 
   const handleSubmit = () => {
     if (!formData.name || !formData.symbolCode || !formData.address) {
@@ -1214,7 +1131,5 @@ const AddSchoolModal = ({ onAdd, onCancel }) => {
     </div>
   );
 };
-
-
 
 export default SchoolCartManager;
