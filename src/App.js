@@ -1,4 +1,37 @@
-> {
+import React, { useState } from 'react';
+import LoginForm from './components/Login';
+import Dashboard from './components/Dashboard';
+import CartsView from './components/Carts';
+import UsersView from './components/Users';
+import ScheduleView from './components/Schedule';
+import ReportsView from './components/Reports';
+import SettingsView from './components/Settings';
+import ESP32ControlPanel from './components/ESP32ControlPanel';  // הוסף את השורה הזאת
+
+import { 
+  Computer, 
+  ShoppingCart, 
+  Users, 
+  Calendar,
+  Power,
+  Battery,
+  MapPin,
+  Plus,
+  Shield,
+  Activity,
+  Settings,
+  X,
+  Edit,
+  Save,
+  Clock,
+  Zap  // הוסף את השורה הזאת
+} from 'lucide-react';
+
+const SchoolCartManager = () => {
+
+
+  // פונקציות שמירה וטעינה מ-localStorage
+  const saveToStorage = (key, data) => {
     try {
       localStorage.setItem(key, JSON.stringify(data));
     } catch (error) {
