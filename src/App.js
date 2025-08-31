@@ -1,35 +1,4 @@
-import React, { useState } from 'react';
-import LoginForm from './components/Login';
-import Dashboard from './components/Dashboard';
-import CartsView from './components/Carts';
-import UsersView from './components/Users';
-import ScheduleView from './components/Schedule';
-import ReportsView from './components/Reports';
-import SettingsView from './components/Settings';
-
-
-import { 
-  Computer, 
-  ShoppingCart, 
-  Users, 
-  Calendar,
-  Power,
-  Battery,
-  MapPin,
-  Plus,
-  Shield,
-  Activity,
-  Settings,
-  X,
-  Edit,
-  Save,
-  Clock
-} from 'lucide-react';
-
-const SchoolCartManager = () => {
-
-  // פונקציות שמירה וטעינה מ-localStorage
-  const saveToStorage = (key, data) => {
+> {
     try {
       localStorage.setItem(key, JSON.stringify(data));
     } catch (error) {
@@ -203,6 +172,21 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
     }
   ]));
 
+  // טעינת משתמש מ-localStorage בטעינה ראשונית - הוסף את זה
+  React.useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        setCurrentUser(user);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.log('שגיאה בטעינת משתמש:', error);
+        localStorage.removeItem('currentUser');
+      }
+    }
+  }, []);
+
   // שמירה אוטומטית כאשר הנתונים משתנים
   React.useEffect(() => {
     saveToStorage('schoolSettings', schoolSettings);
@@ -309,6 +293,7 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
     if (user) {
       setCurrentUser(user);
       setIsAuthenticated(true);
+      localStorage.setItem('currentUser', JSON.stringify(user)); // הוסף את השורה הזאת
       return true;
     }
     return false;
@@ -317,8 +302,10 @@ const [reservations, setReservations] = useState(() => loadFromStorage('reservat
   const handleLogout = () => {
     setCurrentUser(null);
     setIsAuthenticated(false);
+    localStorage.removeItem('currentUser'); // הוסף את השורה הזאת
     setCurrentView('dashboard');
   };
+
 const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
@@ -688,6 +675,7 @@ React.useEffect(() => {
   console.log('🎯 Cart API מוכן עם endpoints מתקדמים!');
   console.log('נסה: window.cartAPI("/api/cart/1/status", "GET")');
 }, [carts, reservations, users]);
+
   if (!isAuthenticated) {
   return <LoginForm onLogin={handleLogin} />;
 }
@@ -759,12 +747,19 @@ React.useEffect(() => {
           </div>
         </div>
         
+        {/* הוסף את השורות האלה כאן */}
+        {console.log('DEBUG: currentUser =', currentUser)}
+        {console.log('DEBUG: role =', currentUser?.role)}
+        {console.log('DEBUG: should show settings:', currentUser?.role === 'masteradmin')}
+        
+
         <div style={{marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem'}}>
           {['dashboard', 'carts', 'schedule', 
-  ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'masteradmin' ? ['users', 'reports'] : []),
-  ...(currentUser?.role === 'masteradmin' || currentUser?.role === 'superadmin' ? ['schools'] : []),
-  ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' ? ['settings'] : [])].map(view => (
-            
+            ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'masteradmin' ? ['users', 'reports'] : []),
+            ...(currentUser?.role === 'masteradmin' || currentUser?.role === 'superadmin' ? ['schools'] : []),
+            ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' || currentUser?.role === 'masteradmin' ? ['settings'] : []),
+            ...(currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' || currentUser?.role === 'masteradmin' ? ['esp32'] : [])
+          ].map(view => (
             <button
               key={view}
               onClick={() => setCurrentView(view)}
@@ -787,14 +782,17 @@ React.useEffect(() => {
               {view === 'reports' && <Activity style={{width: '1rem', height: '1rem'}} />}
               {view === 'schools' && <Computer style={{width: '1rem', height: '1rem'}} />}
               {view === 'settings' && <Settings style={{width: '1rem', height: '1rem'}} />}
+              {view === 'esp32' && <Zap style={{width: '1rem', height: '1rem'}} />}
               <span>
-  {view === 'dashboard' ? 'דשבורד' :
-   view === 'carts' ? 'עגלות' :
-   view === 'schedule' ? 'לוח זמנים' :
-   view === 'users' ? 'משתמשים' :
-   view === 'reports' ? 'דוחות' :
-   view === 'schools' ? 'בתי ספר' : 'הגדרות'}
-</span>
+                {view === 'dashboard' ? 'דשבורד' :
+                 view === 'carts' ? 'עגלות' :
+                 view === 'schedule' ? 'לוח זמנים' :
+                 view === 'users' ? 'משתמשים' :
+                 view === 'reports' ? 'דוחות' :
+                 view === 'schools' ? 'בתי ספר' : 
+                 view === 'settings' ? 'הגדרות' :
+                 view === 'esp32' ? 'בקרת ESP32' : 'לא ידוע'}
+              </span>
             </button>
           ))}
         </div>
@@ -888,8 +886,6 @@ React.useEffect(() => {
 
       <main></main>
 
-      
-
       <main>
         {currentView === 'dashboard' && <Dashboard carts={carts} reservations={reservations} currentUser={currentUser} approveReservation={approveReservation} rejectReservation={rejectReservation} />}
         {currentView === 'schools' && (currentUser?.role === 'masteradmin' || currentUser?.role === 'superadmin') && (
@@ -901,8 +897,9 @@ React.useEffect(() => {
           />
         )}
         {currentView === 'carts' && <CartsView carts={carts} currentUser={currentUser} editingCart={editingCart} setEditingCart={setEditingCart} showCartDetails={showCartDetails} setShowCartDetails={setShowCartDetails} updateCart={updateCart} selectedSchool={selectedSchool} addCart={addCart} />}
-{currentView === 'schedule' && <ScheduleView reservations={reservations} currentWeek={currentWeek} setCurrentWeek={setCurrentWeek} showNewReservation={showNewReservation} setShowNewReservation={setShowNewReservation} addReservation={addReservation} cancelReservation={cancelReservation} carts={carts} currentUser={currentUser} schoolSettings={schoolSettings} selectedSchool={selectedSchool} />}       
-{currentView === 'reports' && (currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'masteradmin') && (          <ReportsView 
+        {currentView === 'schedule' && <ScheduleView reservations={reservations} currentWeek={currentWeek} setCurrentWeek={setCurrentWeek} showNewReservation={showNewReservation} setShowNewReservation={setShowNewReservation} addReservation={addReservation} cancelReservation={cancelReservation} carts={carts} currentUser={currentUser} schoolSettings={schoolSettings} selectedSchool={selectedSchool} />}       
+        {currentView === 'reports' && (currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'masteradmin') && (
+          <ReportsView 
             carts={carts}
             reservations={reservations}
             users={users}
@@ -919,7 +916,8 @@ React.useEffect(() => {
             </div>
           </div>
         )}
-{currentView === 'users' && (currentUser?.role === 'superadmin' || currentUser?.role === 'masteradmin' || currentUser?.role === 'manager') && (          <UsersView 
+        {currentView === 'users' && (currentUser?.role === 'superadmin' || currentUser?.role === 'masteradmin' || currentUser?.role === 'manager') && (
+          <UsersView 
             users={users}
             currentUser={currentUser}
             showAddUser={showAddUser}
@@ -939,17 +937,29 @@ React.useEffect(() => {
           </div>
         )}
 
-        {currentView === 'settings' && (currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician') && (
+        {currentView === 'settings' && (currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' || currentUser?.role === 'masteradmin') && (
           <SettingsView 
             schoolSettings={schoolSettings}
             setSchoolSettings={setSchoolSettings}
           />
         )}
-        {currentView === 'settings' && (currentUser?.role !== 'manager' && currentUser?.role !== 'superadmin' && currentUser?.role !== 'technician') && (
+        {currentView === 'settings' && (currentUser?.role !== 'manager' && currentUser?.role !== 'superadmin' && currentUser?.role !== 'technician' && currentUser?.role !== 'masteradmin') && (
           <div style={{padding: '1.5rem'}}>
             <div style={{backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.5rem', padding: '1rem'}}>
               <h3 style={{color: '#991b1b', fontWeight: '500'}}>אין הרשאה</h3>
               <p style={{color: '#dc2626', fontSize: '0.875rem', marginTop: '0.25rem'}}>רק מנהל מערכת או מנהל בית ספר יכולים לגשת להגדרות מערכת</p>
+            </div>
+          </div>
+        )}
+
+        {currentView === 'esp32' && (currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'technician' || currentUser?.role === 'masteradmin') && (
+          <ESP32ControlPanel currentUser={currentUser} />
+        )}
+        {currentView === 'esp32' && (currentUser?.role !== 'manager' && currentUser?.role !== 'superadmin' && currentUser?.role !== 'technician' && currentUser?.role !== 'masteradmin') && (
+          <div style={{padding: '1.5rem'}}>
+            <div style={{backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.5rem', padding: '1rem'}}>
+              <h3 style={{color: '#991b1b', fontWeight: '500'}}>אין הרשאה</h3>
+              <p style={{color: '#dc2626', fontSize: '0.875rem', marginTop: '0.25rem'}}>רק מנהל מערכת או מנהל בית ספר יכולים לגשת לבקרת ESP32</p>
             </div>
           </div>
         )}
@@ -958,6 +968,7 @@ React.useEffect(() => {
   );
 };
 
+// ... (שאר הקוד נשאר כפי שהיה)
 
 const SchoolsView = ({ schools, setSchools, selectedSchool, setSelectedSchool }) => {
   const [showAddSchool, setShowAddSchool] = useState(false);
