@@ -239,8 +239,26 @@ const ScheduleView = ({
                             ))}
                           </div>
                         ) : day.isWorkDay ? (
-                          <div style={{color: '#d1d5db'}}>פנוי</div>
-                        ) : null}
+  <div 
+    style={{
+      color: '#d1d5db', 
+      cursor: 'pointer',
+      padding: '4px',
+      borderRadius: '2px',
+      transition: 'background-color 0.2s'
+    }}
+    onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+    onClick={() => {
+      setShowNewReservation(true);
+      // אפשר להעביר את התאריך והשעה כ-props נוספים
+    }}
+    title="לחץ להזמנה חדשה"
+  >
+    פנוי
+  </div>
+) : null}
+
                       </td>
                     );
                   })}
@@ -254,7 +272,7 @@ const ScheduleView = ({
       <div style={{backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)', border: '1px solid #e5e7eb', padding: '1.5rem'}}>
         <h3 style={{fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem'}}>הזמנות קיימות</h3>
         <div style={{display: 'flex', flexDirection: 'column', gap: '0.75rem'}}>
-          {filteredReservations.map(reservation => (
+          {filteredReservations.filter(res => res.status === 'pending').map(reservation => (
             <div key={reservation.id} style={{border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1rem', backgroundColor: '#f9fafb'}}>
               <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start'}}>
                 <div style={{flex: 1}}>
