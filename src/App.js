@@ -864,7 +864,7 @@ const SchoolCartManager = () => {
           />
         )}
         {currentView === 'carts' && <CartsView carts={carts} currentUser={currentUser} editingCart={editingCart} setEditingCart={setEditingCart} showCartDetails={showCartDetails} setShowCartDetails={setShowCartDetails} updateCart={updateCart} selectedSchool={selectedSchool} addCart={addCart} />}
-        {currentView === 'schedule' && <ScheduleView reservations={reservations} currentWeek={currentWeek} setCurrentWeek={setCurrentWeek} showNewReservation={showNewReservation} setShowNewReservation={setShowNewReservation} addReservation={addReservation} cancelReservation={cancelReservation} carts={carts} currentUser={currentUser} schoolSettings={schoolSettings} selectedSchool={selectedSchool} />}       
+        {currentView === 'schedule' && <ScheduleView reservations={reservations} currentWeek={currentWeek} setCurrentWeek={setCurrentWeek} showNewReservation={showNewReservation} setShowNewReservation={setShowNewReservation} addReservation={addReservation} cancelReservation={cancelReservation} carts={currentUser?.role === 'masteradmin' ? carts : carts.filter(cart => cart.schoolId === selectedSchool)} currentUser={currentUser} schoolSettings={schoolSettings} selectedSchool={selectedSchool} />}       
         {currentView === 'reports' && (currentUser?.role === 'manager' || currentUser?.role === 'superadmin' || currentUser?.role === 'masteradmin') && (
           <ReportsView 
             carts={carts}
